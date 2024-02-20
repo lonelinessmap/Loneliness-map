@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Loneliness Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="https://unpkg.com/leaflet@1.9.1/dist/leaflet.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script async src="https://cse.google.com/cse.js?cx=23997c86c2e7c420e"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    
+
+</head>
+<body>
+    <header>
+        <h1>World Map on Loneliness</h1>
+    </header>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search for a country...">
+    </div>
+    <div id="worldMap"></div>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <h2>Welcome!</h2>
+            <h3>General info about loneliness</h3>
+            <p>Every second a life is lost to sucide. Mental health is the leading cause of sucide, while loneliness leads to variety of mental health issues. Loneliness burdens the global public health system and it increases the risk of mental and physical health.</p>
+        </div>
+    </div>
+    
+    <script src="scriptvv.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

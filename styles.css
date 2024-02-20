@@ -1,0 +1,204 @@
+/* styles.css */
+
+/* General styling */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+}
+
+h1 {
+    margin: 0;
+}
+
+/* Styles for the search container */
+.search-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.search-container input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Styles for the world map container */
+#worldMap {
+    border: 1px solid #ccc;
+    
+        width: 100vw; /* Full width of the viewport */
+        height: 100vh; /* Full height of the viewport */
+        position: absolute; /* Position the map absolutely */
+    
+}
+
+/* Styles for the dynamically added content */
+.dynamic-content-container {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: rgba(241, 245, 248, 0.333);
+    color: yellow;
+    border: 3px solid rgb(65, 52, 52);
+}
+
+
+
+.dynamic-content-container td {
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #3455;
+    color: black;
+}
+
+.dynamic-content-container td:first-child {
+    font-weight: bold;
+    width: 30%;
+    background-color: #3455; /* You can customize the background color */
+}
+
+/* Add this style for the second column in the table */
+.dynamic-content-container td:nth-child(2) {
+    width: 70%;
+    background-color: #3455; /* You can customize the background color */
+    color: yellow;
+}
+
+/* Styles for News Articles */
+.news-article {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.news-article h3 {
+    /* Add specific styles for news article titles */
+    color: blue;
+}
+
+/* Styles for Research Articles */
+.research-article {
+    /* Add specific styles for research articles */
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.research-article h3 {
+    /* Add specific styles for research article titles */
+    color: green;
+}
+
+/* Add more styles as needed */
+/* For indentation */
+.indented-paragraph {
+    font-style: italic; /* Adjust the value as needed */
+    color: gray;
+}
+
+/* For justification */
+.justified-paragraph {
+    text-align: justify;
+}
+.influencer-profile {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.influencer-profile h3 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.influencer-profile p {
+    margin: 5px 0;
+}
+
+.influencer-profile p:first-child {
+    font-weight: bold;
+}
+
+.country-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .card-content {
+    padding: 15px;
+  }
+  
+  .info-item {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+    margin-bottom: 5px; /* Adjust the margin to control vertical spacing */
+  }
+  
+  .label {
+    font-weight: bold;
+    min-width: 180px; /* Set a minimum width for the labels to ensure consistent spacing */
+    text-align: left;
+  }
+  
+  .value {
+    flex-wrap: wrap;
+    text-align: left;
+    color: yellowgreen;
+  }
+  
+/* Add this CSS to your existing styles.css or in a separate CSS file */
+.popup {
+    display: none;
+    position: fixed;
+    top: 25%;
+    left: 0%;
+    width: 300px; /* Set the width of the popup */
+    height: 500px; /* Set the height of the popup */
+    transform: translateX(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+
+.popup-content {
+    position: relative;
+}
+.popup-content h2 {
+    background-color: #959090;
+    color: white;
+    padding: 10px;
+    margin-top: 0;
+}
+
+.close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.info-btn.active {
+    background-color: #333;
+    color: white;
+}
