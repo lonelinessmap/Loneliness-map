@@ -308,13 +308,14 @@ document.addEventListener('DOMContentLoaded', function () {
         
             function displayNewsTab(countryName) {
                 return new Promise((resolve, reject) => {
-                    const apiKey = 'a06dcf890cc04ed097b65b1c57b231e2';
+                    const apiKey = '5a523b663ab5f12c668be33473595e18'; // Gnews
                     const baseKeyword = 'loneliness';
                     const synonyms = ['solitude', 'isolation', 'depression', 'alone'];
                     const countryKeyword = countryName ? `${countryName} ${baseKeyword}` : baseKeyword;
                     const keywordQuery = `${baseKeyword} OR ${synonyms.join(' OR ')}`;
                     // const apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(countryKeyword)}&apiKey=${apiKey}`;
-                    const apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&apiKey=${apiKey}`;
+                    // const apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&apiKey=${apiKey}`;
+                    const apiUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&token=${apiKey}`;
                     fetch(apiUrl, { mode: 'cors' })
                         .then(response => {
                             if (!response.ok) {
