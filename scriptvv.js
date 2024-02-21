@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const keywordQuery = `${baseKeyword} OR ${synonyms.join(' OR ')}`;
                     // const apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(countryKeyword)}&apiKey=${apiKey}`;
                     const apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&apiKey=${apiKey}`;
-                    fetch(apiUrl)
+                    fetch(apiUrl, { mode: 'cors' })
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error(`Failed to fetch news: ${response.status} ${response.statusText}`);
