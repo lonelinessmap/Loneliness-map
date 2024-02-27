@@ -98,89 +98,48 @@ document.addEventListener('DOMContentLoaded', function () {
                                 const countryInfo = data[0];
                                 content.innerHTML = `
                                 
-                                
-                                <table class="dynamic-content-container">
-                               
-                                
-                                    <tr>
-                                        <td class="dynamic-content-table">Population:</td>
-                                        <td class="dynamic-content-table">${countryInfo.population}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dynamic-content-table">Area:</td>
-                                        <td class="dynamic-content-table">${countryInfo.area} square kilometers</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dynamic-content-table">Capital:</td>
-                                        <td class="dynamic-content-table">${countryInfo.capital}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dynamic-content-table">Region:</td>
-                                        <td class="dynamic-content-table">${countryInfo.region}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dynamic-content-table">Subregion:</td>
-                                        <td class="dynamic-content-table">${countryInfo.subregion}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dynamic-content-table">Population Density:</td>
-                                        <td class="dynamic-content-table">${(countryInfo.population / countryInfo.area).toFixed(2)} people/sq km</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dynamic-content-table">Demonym:</td>
-                                        <td class="dynamic-content-table">${countryInfo.demonym} </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dynamic-content-table">Borders:</td>
-                                        <td class="dynamic-content-table">${countryInfo.borders} </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="dynamic-content-table">Time Zones:</td>
-                                        <td class="dynamic-content-table">${countryInfo.timezones} </td>
-                                    </tr>
-                            </table>
 
 
-                            <div class="country-card">
-  <div class="card-content">
-    <div class="info-item">
-      <span class="label">Population:</span>
-      <span class="value">${countryInfo.population}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Area:</span>
-      <span class="value">${countryInfo.area} square kilometers</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Capital:</span>
-      <span class="value">${countryInfo.capital}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Region:</span>
-      <span class="value">${countryInfo.region}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Subregion:</span>
-      <span class="value">${countryInfo.subregion}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Population Density:</span>
-      <span class="value">${(countryInfo.population / countryInfo.area).toFixed(2)} people/sq km</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Demonym:</span>
-      <span class="value">${countryInfo.demonym}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Borders:</span>
-      <span class="value">${countryInfo.borders}</span>
-    </div>
-    <div class="info-item">
-      <span class="label">Time Zones:</span>
-      <span class="value">${countryInfo.timezones}</span>
-    </div>
-  </div>
-</div>
+                        <div class="country-card">
+                          <div class="card-content">
+                            <div class="info-item">
+                              <span class="label">Population:</span>
+                              <span class="value">${countryInfo.population}</span>
+                            </div>
+                        <div class="info-item">
+                            <span class="label">Area:</span>
+                            <span class="value">${countryInfo.area} square kilometers</span>
+                        </div>
+                        <div class="info-item">
+                          <span class="label">Capital:</span>
+                          <span class="value">${countryInfo.capital}</span>
+                        </div>
+                        <div class="info-item">
+                          <span class="label">Region:</span>
+                          <span class="value">${countryInfo.region}</span>
+                        </div>
+                        <div class="info-item">
+                          <span class="label">Subregion:</span>
+                          <span class="value">${countryInfo.subregion}</span>
+                        </div>
+                        <div class="info-item">
+                          <span class="label">Population Density:</span>
+                          <span class="value">${(countryInfo.population / countryInfo.area).toFixed(2)} people/sq km</span>
+                        </div>
+                        <div class="info-item">
+                          <span class="label">Demonym:</span>
+                          <span class="value">${countryInfo.demonym}</span>
+                        </div>
+                        <div class="info-item">
+                          <span class="label">Borders:</span>
+                          <span class="value">${countryInfo.borders}</span>
+                        </div>
+                        <div class="info-item">
+                          <span class="label">Time Zones:</span>
+                          <span class="value">${countryInfo.timezones}</span>
+                        </div>
+                        </div>
+                    </div>
 
                         `;
                             } else {
