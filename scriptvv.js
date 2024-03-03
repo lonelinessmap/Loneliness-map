@@ -72,7 +72,9 @@ document.addEventListener('DOMContentLoaded', function () {
             <button id="Social" class="info-btn" onclick="showInfo('Social','${countryName}')">Social</button>
             <button id="Influencers" class="info-btn" onclick="showInfo('Influencers','${countryName}')">Influencers</button>
             <button id="Google Trend" class="info-btn" onclick="showInfo('Google Trend','${countryName}')">Google Trend</button>
-                
+            <button id="Sentiment Review" class="info-btn" onclick="showInfo('Sentiment Review','${countryName}')">Sentiment Review</button>
+            <button id="Digital Interventions" class="info-btn" onclick="showInfo('Digital Interventions','${countryName}')">Digital Interventions</button>
+            
             </div>
             <div id="tabContent"></div>
             </body>
@@ -80,6 +82,10 @@ document.addEventListener('DOMContentLoaded', function () {
             `);
 
             showInfo('Statistics', countryName);
+            
+            
+          
+            
 
             function showInfo(tab, countryName) {
                 
@@ -100,46 +106,46 @@ document.addEventListener('DOMContentLoaded', function () {
                                 
 
 
-                        <div class="country-card">
-                          <div class="card-content">
+                            <div class="country-card">
+                            <div class="card-content">
                             <div class="info-item">
-                              <span class="label">Population:</span>
-                              <span class="value">${countryInfo.population}</span>
+                                <span class="label">Population:</span>
+                                <span class="value">${countryInfo.population}</span>
                             </div>
-                        <div class="info-item">
-                            <span class="label">Area:</span>
-                            <span class="value">${countryInfo.area} square kilometers</span>
-                        </div>
-                        <div class="info-item">
-                          <span class="label">Capital:</span>
-                          <span class="value">${countryInfo.capital}</span>
-                        </div>
-                        <div class="info-item">
-                          <span class="label">Region:</span>
-                          <span class="value">${countryInfo.region}</span>
-                        </div>
-                        <div class="info-item">
-                          <span class="label">Subregion:</span>
-                          <span class="value">${countryInfo.subregion}</span>
-                        </div>
-                        <div class="info-item">
-                          <span class="label">Population Density:</span>
-                          <span class="value">${(countryInfo.population / countryInfo.area).toFixed(2)} people/sq km</span>
-                        </div>
-                        <div class="info-item">
-                          <span class="label">Demonym:</span>
-                          <span class="value">${countryInfo.demonym}</span>
-                        </div>
-                        <div class="info-item">
-                          <span class="label">Borders:</span>
-                          <span class="value">${countryInfo.borders}</span>
-                        </div>
-                        <div class="info-item">
-                          <span class="label">Time Zones:</span>
-                          <span class="value">${countryInfo.timezones}</span>
-                        </div>
-                        </div>
-                    </div>
+                            <div class="info-item">
+                                <span class="label">Area:</span>
+                                <span class="value">${countryInfo.area} square kilometers</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Capital:</span>
+                                <span class="value">${countryInfo.capital}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Region:</span>
+                                <span class="value">${countryInfo.region}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Subregion:</span>
+                                <span class="value">${countryInfo.subregion}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Population Density:</span>
+                                <span class="value">${(countryInfo.population / countryInfo.area).toFixed(2)} people/sq km</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Demonym:</span>
+                                <span class="value">${countryInfo.demonym}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Borders:</span>
+                                <span class="value">${countryInfo.borders}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Time Zones:</span>
+                                <span class="value">${countryInfo.timezones}</span>
+                            </div>
+                            </div>
+                            </div>
 
                         `;
                             } else {
@@ -164,6 +170,26 @@ document.addEventListener('DOMContentLoaded', function () {
                             });
                     }
                     
+                    else if (tab === 'Digital Interventions') {
+                        // Fetch influencers data and update content
+                        displayDigital(countryName)
+                        .then(data => updateContent(data))
+                            .catch(error => {
+                                console.error('Error fetching Digital Interventions:', error);
+                                content.innerHTML = `Error displaying Digital Interventions! Try again after 5 secs!: ${error.message}`;
+                            });
+                    }
+
+                    else if (tab === 'Sentiment Review') {
+                        // Fetch influencers data and update content
+                        displaySentiment(countryName)
+                        .then(data => updateContent(data))
+                            .catch(error => {
+                                console.error('Error Sentiment Analysis:', error);
+                                content.innerHTML = `Error displaying Sentiment Review! Try again after 5 secs!: ${error.message}`;
+                            });
+                    }
+
                     else if (tab === 'Social') {
                         // Fetch influencers data and update content
                         displaySocialTab(countryName)
@@ -261,54 +287,159 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
             
-            
-            
-            
-        
-            function displayNewsTab(countryName) {
+            function displaySentiment(countryName) {
                 return new Promise((resolve, reject) => {
                     const apiKey = '5a523b663ab5f12c668be33473595e18'; // Gnews
                     const baseKeyword = 'loneliness';
                     const synonyms = ['solitude', 'isolation', 'depression', 'alone'];
                     const countryKeyword = countryName ? `${countryName} ${baseKeyword}` : baseKeyword;
                     const keywordQuery = `${baseKeyword} OR ${synonyms.join(' OR ')}`;
+                    
+                    const apiUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&token=${apiKey}`;
+                    fetch(apiUrl, { mode: 'cors' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Failed to fetch news: ${response.status} ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('API Response:', data);
+            
+                        let totalScore = 0;
+                        let articleCount = 0;
+            
+                        const articles = data.articles.map(article => {
+                            const content = `${article.title}. ${article.description}. ${article.content}`.toLowerCase();
+            
+                            var Sentiment = require('sentiment');
+                            var sentiment = new Sentiment();
+                            var doc = sentiment.analyze(content);
+            
+                            totalScore += doc.score;
+                            articleCount++;
+            
+                            console.log(doc);
+            
+                            return `
+                                <div class="news-article">
+                                    <h3>${article.title || 'Title not available'}</h3>
+                                    <p class="indented-paragraph">Source: ${article.source.name || 'Source not available'}</p>
+                                    <p class="indented-paragraph">Sentiment: ${doc.score} score, ${doc.comparative} comparative</p>
+                                    <p class="indented-paragraph">Positive words: ${doc.positive.join(', ')}</p>
+                                    <p class="indented-paragraph">Negative words: ${doc.negative.join(', ')}</p>
+                                    <p class="indented-paragraph">All words: ${doc.words.join(', ')}</p>
+                                    <a href="${article.url}" target="_blank">Read more</a>
+                                </div>
+                            `;
+                        });
+            
+                        const averageScore = totalScore / articleCount;
+            
+                        const averageScoreDisplay = `
+                            <div class="average-score">
+                                <p>Average Sentiment Score: ${averageScore.toFixed(2)}</p>
+                            </div>
+                        `;
+            
+                        const result = [averageScoreDisplay, ...articles];
+                        resolve(result);
+                    })
+                    .catch(error => reject(error));
+                });
+            }
+            
+
+            function displayNewsTab(countryName) {
+                return new Promise((resolve, reject) => {
+                    //const apiKey = 'a06dcf890cc04ed097b65b1c57b231e2';// News
+                    const apiKey = '5a523b663ab5f12c668be33473595e18'; // Gnews
+                    const baseKeyword = 'loneliness';
+                    const synonyms = ['solitude', 'isolation', 'depression', 'alone'];
+                    const countryKeyword = countryName ? `${countryName} ${baseKeyword}` : baseKeyword;
+                    const keywordQuery = `${baseKeyword} OR ${synonyms.join(' OR ')}`;
+                    
                     // const apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(countryKeyword)}&apiKey=${apiKey}`;
                     // const apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&apiKey=${apiKey}`;
                     const apiUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&token=${apiKey}`;
                     fetch(apiUrl, { mode: 'cors' })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`Failed to fetch news: ${response.status} ${response.statusText}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('API Response:', data);
-                            // const sortedArticles = data.articles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-                            // const articles = data.articles.map(article => `
-                            // const articles = sortedArticles.map(article => `
-                            const filteredArticles = data.articles.filter(article =>
-                                article.title && article.description && article.content &&
-                                (article.title.toLowerCase().includes(baseKeyword) ||
-                                article.description.toLowerCase().includes(baseKeyword) ||
-                                article.content.toLowerCase().includes(baseKeyword))
-                            );
-                            
-                            const articles = data.articles.map(article => `
-                                <div class="news-article">
-                                    <h3>${article.title || 'Title not available'}</h3>
-                                    <p class="justified-paragraph">${article.description || 'Description not available'}</p>
-                                    <p class="indented-paragraph">Source: ${article.source.name || 'Source not available'}</p>
-                                    <a href="${article.url}" target="_blank">Read more</a>
-                                </div>
-                            `);
-                            resolve(articles);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch news: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('API Response:', data);
 
+                const articles = data.articles.map(article => {
+                    const content = `${article.title}. ${article.description}. ${article.content}`.toLowerCase();
+
+
+                    return `
+                        <div class="news-article">
+                            <h3>${article.title || 'Title not available'}</h3>
+                            <p class="justified-paragraph">${article.description || 'Description not available'}</p>
+                            <p class="indented-paragraph">Source: ${article.source.name || 'Source not available'}</p>
+                            <a href="${article.url}" target="_blank">Read more</a>
+                        </div>
+                    `;
+                });
+
+                resolve(articles);
+            })
+            .catch(error => reject(error));
+            });
+            }
+            
+            
+            function displayDigital(countryName) {
+                return new Promise((resolve, reject) => {
+                    const keywords = ['Digital interventions for loneliness', 'ICT and loneliness', 'social media loneliness', 'Artificial Intelligence and loneliness'];
+                    const countryKeyword = countryName ? `${countryName} ` : '';
+            
+                    const searchPromises = keywords.map(keyword => {
+                        const apiUrl = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(countryKeyword + keyword)}&offset=0&limit=25&fields=title,authors,url,abstract,journal,venue&key=xIwxU00t5FyvWOJDEC5D5B4ZW7zsC8Z1s5RMaA34`;
+                        return fetch(apiUrl)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`Failed to fetch research articles: ${response.status} ${response.statusText}`);
+                                }
+                                return response.json();
+                            });
+                    });
+            
+                    Promise.all(searchPromises)
+                        .then(results => {
+                            const researchArticles = results.flatMap(result => {
+                                if (result.data) {
+                                    try {
+                                        return result.data.map(article => `
+                                            <div class="research-article">
+                                                <h3>${article.title}</h3>
+                                                <p class="indented-paragraph">Published in ${article.venue || 'Unknown Source'}</p>
+                                                <p>Authors: ${article.authors.map(author => author.name).join(', ')}</p>
+                                                ${article.abstract ? `<p class="justified-paragraph">Abstract: ${article.abstract}</p>` : ''}
+                                                ${article.url ? `<a href="${article.url}" target="_blank">Read more</a>` : ''}
+                                            </div>
+                                        `);
+                                    } catch (error) {
+                                        console.error('Error mapping articles:', error);
+                                        console.log('Article data:', result.data);
+                                        return [];
+                                    }
+                                } else {
+                                    return []; // Return an empty array if result.data is undefined
+                                }
+                            });
                             
+                            resolve(researchArticles);
                         })
                         .catch(error => reject(error));
                 });
             }
+            
+           
             
             function displayResearchTab(countryName) {
                 return new Promise((resolve, reject) => {
