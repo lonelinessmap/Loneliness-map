@@ -399,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const countryKeyword = countryName ? `${countryName} ` : '';
             
                     const searchPromises = keywords.map(keyword => {
-                        const apiUrl = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(countryKeyword + keyword)}&offset=0&limit=25&fields=title,authors,url,abstract,journal,venue&key=xIwxU00t5FyvWOJDEC5D5B4ZW7zsC8Z1s5RMaA34`;
+                        const apiUrl = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(countryKeyword + keyword)}&offset=2&limit=10&fields=title,authors,url,abstract,journal,venue&key=xIwxU00t5FyvWOJDEC5D5B4ZW7zsC8Z1s5RMaA34`;
                         return fetch(apiUrl)
                             .then(response => {
                                 if (!response.ok) {
