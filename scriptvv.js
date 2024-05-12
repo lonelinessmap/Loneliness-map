@@ -2,11 +2,13 @@
 document.addEventListener('DOMContentLoaded', function () {
     var map = L.map('worldMap', {
         center: [0, 0],
-        zoom: 2,
-        worldCopyJump: false // Prevent map from repeating
+        zoom: 1.5,
+        worldCopyJump: false, // Prevent map from repeating
+        dragging: false, // Disable dragging
+        zoomControl: false, // Disable zoom control
+        
     });
-    
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
     }).addTo(map);
     
@@ -72,8 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
             <button id="Social" class="info-btn" onclick="showInfo('Social','${countryName}')">Social</button>
             <button id="Influencers" class="info-btn" onclick="showInfo('Influencers','${countryName}')">Influencers</button>
             <button id="Google Trend" class="info-btn" onclick="showInfo('Google Trend','${countryName}')">Google Trend</button>
-            <button id="Sentiment Review" class="info-btn" onclick="showInfo('Sentiment Review','${countryName}')">Sentiment Review</button>
-            <button id="Digital Interventions" class="info-btn" onclick="showInfo('Digital Interventions','${countryName}')">Digital Interventions</button>
             
             </div>
             <div id="tabContent"></div>
@@ -170,25 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             });
                     }
                     
-                    else if (tab === 'Digital Interventions') {
-                        // Fetch influencers data and update content
-                        displayDigital(countryName)
-                        .then(data => updateContent(data))
-                            .catch(error => {
-                                console.error('Error fetching Digital Interventions:', error);
-                                content.innerHTML = `Error displaying Digital Interventions! Try again after 5 secs!: ${error.message}`;
-                            });
-                    }
-
-                    else if (tab === 'Sentiment Review') {
-                        // Fetch influencers data and update content
-                        displaySentiment(countryName)
-                        .then(data => updateContent(data))
-                            .catch(error => {
-                                console.error('Error Sentiment Analysis:', error);
-                                content.innerHTML = `Error displaying Sentiment Review! Try again after 5 secs!: ${error.message}`;
-                            });
-                    }
+                    
 
                     else if (tab === 'Social') {
                         // Fetch influencers data and update content
@@ -287,67 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
             
-            function displaySentiment(countryName) {
-                return new Promise((resolve, reject) => {
-                    const apiKey = '5a523b663ab5f12c668be33473595e18'; // Gnews
-                    const baseKeyword = 'loneliness';
-                    const synonyms = ['solitude', 'isolation', 'depression', 'alone'];
-                    const countryKeyword = countryName ? `${countryName} ${baseKeyword}` : baseKeyword;
-                    const keywordQuery = `${baseKeyword} OR ${synonyms.join(' OR ')}`;
-                    
-                    const apiUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&token=${apiKey}`;
-                    fetch(apiUrl, { mode: 'cors' })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`Failed to fetch news: ${response.status} ${response.statusText}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('API Response:', data);
             
-                        let totalScore = 0;
-                        let articleCount = 0;
-            
-                        const articles = data.articles.map(article => {
-                            const content = `${article.title}. ${article.description}. ${article.content}`.toLowerCase();
-            
-                            var Sentiment = require('sentiment');
-                            var sentiment = new Sentiment();
-                            var doc = sentiment.analyze(content);
-            
-                            totalScore += doc.score;
-                            articleCount++;
-            
-                            console.log(doc);
-            
-                            return `
-                                <div class="news-article">
-                                    <h3>${article.title || 'Title not available'}</h3>
-                                    <p class="indented-paragraph">Source: ${article.source.name || 'Source not available'}</p>
-                                    <p class="indented-paragraph">Sentiment: ${doc.score} score, ${doc.comparative} comparative</p>
-                                    <p class="indented-paragraph">Positive words: ${doc.positive.join(', ')}</p>
-                                    <p class="indented-paragraph">Negative words: ${doc.negative.join(', ')}</p>
-                                    <p class="indented-paragraph">All words: ${doc.words.join(', ')}</p>
-                                    <a href="${article.url}" target="_blank">Read more</a>
-                                </div>
-                            `;
-                        });
-            
-                        const averageScore = totalScore / articleCount;
-            
-                        const averageScoreDisplay = `
-                            <div class="average-score">
-                                <p>Average Sentiment Score: ${averageScore.toFixed(2)}</p>
-                            </div>
-                        `;
-            
-                        const result = [averageScoreDisplay, ...articles];
-                        resolve(result);
-                    })
-                    .catch(error => reject(error));
-                });
-            }
             
 
             function displayNewsTab(countryName) {
@@ -358,10 +280,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     const synonyms = ['solitude', 'isolation', 'depression', 'alone'];
                     const countryKeyword = countryName ? `${countryName} ${baseKeyword}` : baseKeyword;
                     const keywordQuery = `${baseKeyword} OR ${synonyms.join(' OR ')}`;
-                    
+                
                     // const apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(countryKeyword)}&apiKey=${apiKey}`;
                     // const apiUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&apiKey=${apiKey}`;
                     const apiUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(countryKeyword)}&qInTitle=${encodeURIComponent(keywordQuery)}&token=${apiKey}`;
+                    
                     fetch(apiUrl, { mode: 'cors' })
             .then(response => {
                 if (!response.ok) {
@@ -377,12 +300,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                     return `
-                        <div class="news-article">
-                            <h3>${article.title || 'Title not available'}</h3>
-                            <p class="justified-paragraph">${article.description || 'Description not available'}</p>
-                            <p class="indented-paragraph">Source: ${article.source.name || 'Source not available'}</p>
-                            <a href="${article.url}" target="_blank">Read more</a>
-                        </div>
+                    <div class="news-article">
+                        <h3>${article.title || 'Title not available'}</h3>
+                        <img src="${article.image || 'Image not available'}" alt="Article Image" style="max-width: 100%; height: auto;">
+                        <p class="justified-paragraph">${article.description || 'Description not available'}</p>
+                        <p class="indented-paragraph">Source: ${article.source.name || 'Source not available'}</p>
+                        <p class="indented-paragraph">Published: ${article.publishedAt || 'Source not available'}</p>
+                        <a href="${article.url}" target="_blank">Read more</a>
+                    </div>
                     `;
                 });
 
@@ -393,61 +318,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             
             
-            function displayDigital(countryName) {
-                return new Promise((resolve, reject) => {
-                    const keywords = ['Digital interventions for loneliness', 'ICT and loneliness', 'social media loneliness', 'Artificial Intelligence and loneliness'];
-                    const countryKeyword = countryName ? `${countryName} ` : '';
-            
-                    const searchPromises = keywords.map(keyword => {
-                        const apiUrl = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(countryKeyword + keyword)}&offset=10&limit=50&fields=title,authors,url,abstract,journal,venue&key=xIwxU00t5FyvWOJDEC5D5B4ZW7zsC8Z1s5RMaA34`;
-                        return fetch(apiUrl)
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error(`Failed to fetch research articles: ${response.status} ${response.statusText}`);
-                                }
-                                return response.json();
-                            });
-                    });
-            
-                    Promise.all(searchPromises)
-                        .then(results => {
-                            const researchArticles = results.flatMap(result => {
-                                if (result.data) {
-                                    try {
-                                        return result.data.map(article => `
-                                            <div class="research-article">
-                                                <h3>${article.title}</h3>
-                                                <p class="indented-paragraph">Published in ${article.venue || 'Unknown Source'}</p>
-                                                <p>Authors: ${article.authors.map(author => author.name).join(', ')}</p>
-                                                ${article.abstract ? `<p class="justified-paragraph">Abstract: ${article.abstract}</p>` : ''}
-                                                ${article.url ? `<a href="${article.url}" target="_blank">Read more</a>` : ''}
-                                            </div>
-                                        `);
-                                    } catch (error) {
-                                        console.error('Error mapping articles:', error);
-                                        console.log('Article data:', result.data);
-                                        return [];
-                                    }
-                                } else {
-                                    return []; // Return an empty array if result.data is undefined
-                                }
-                            });
-                            
-                            resolve(researchArticles);
-                        })
-                        .catch(error => reject(error));
-                });
-            }
-            
-           
-            
             function displayResearchTab(countryName) {
                 return new Promise((resolve, reject) => {
                     const baseKeyword = 'loneliness';
                     const countryKeyword = countryName ? `${countryName} ${baseKeyword}` : baseKeyword;
-                    const apiUrl = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(countryKeyword)}&offset=10&limit=50&fields=title,authors,url,abstract,journal,venue`;
+                    const apiUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${encodeURIComponent(countryKeyword)}&retmode=json`;
             
-                    fetch(apiUrl)
+                    fetch(apiUrl, { method: "GET", mode: 'cors' })
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error(`Failed to fetch research articles: ${response.status} ${response.statusText}`);
@@ -455,22 +332,64 @@ document.addEventListener('DOMContentLoaded', function () {
                             return response.json();
                         })
                         .then(data => {
-                            console.log('API Response:', data);
-                            const researchArticles = data.data.map(article => `
-                            <div class="research-article">
-                                <h3 >${article.title}</h3>
-                                <p class="indented-paragraph">Published in ${ article.venue || 'Unknown Source'}</p>
-                                <p>Authors: ${article.authors.map(author => author.name).join(', ')}</p>
-                                ${article.abstract ? `<p class="justified-paragraph">Abstract: ${article.abstract}</p>` : ''}
-                                ${article.url ? `<a href="${article.url}" target="_blank" >Read more</a>` : ''}
-                            </div>
-                            `);
-                            resolve(researchArticles);
+                            const articleIds = data.esearchresult.idlist;
+            
+                            // Fetch detailed information for each article
+                            const articlePromises = articleIds.map(articleId => {
+                                const articleUrl = `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=${articleId}&retmode=xml`;
+                                return fetch(articleUrl, { method: "GET", mode: 'cors' })
+                                    .then(response => response.text())
+                                    .then(xmlData => {
+                                        const parser = new DOMParser();
+                                        const xmlDoc = parser.parseFromString(xmlData, "text/xml");
+            
+                                        const title = xmlDoc.getElementsByTagName("ArticleTitle")[0].textContent;
+                                        const venue = xmlDoc.getElementsByTagName("ISOAbbreviation")[0].textContent;
+                                        const authors = Array.from(xmlDoc.getElementsByTagName("Author")).map(author => {
+                                            const lastName = author.getElementsByTagName("LastName")[0].textContent;
+                                            const foreName = author.getElementsByTagName("ForeName")[0].textContent;
+                                            return `${foreName} ${lastName}`;
+                                        });
+                                        const abstract = xmlDoc.getElementsByTagName("AbstractText")[0].textContent;
+                                        const url = `https://pubmed.ncbi.nlm.nih.gov/${articleId}/`;
+            
+                                        return { title, venue, authors, abstract, url };
+                                    })
+                                    .catch(error => {
+                                        console.error(`Failed to fetch article ${articleId}: ${error}`);
+                                        return null;
+                                    });
+                            });
+            
+                            // Resolve with the list of article details
+                            Promise.all(articlePromises)
+                                .then(articles => {
+                                    const researchArticles = articles.map(article => {
+                                        if (!article) return ""; // Skip failed fetches
+                                        return `
+                                            <div class="research-article">
+                                                <h3>${article.title}</h3>
+                                                <p class="indented-paragraph">Published in ${article.venue || 'Unknown Source'}</p>
+                                                <p>Authors: ${article.authors.join(', ')}</p>
+                                                ${article.abstract ? `<p class="justified-paragraph">Abstract: ${article.abstract}</p>` : ''}
+                                                ${article.url ? `<a href="${article.url}" target="_blank">Read more</a>` : ''}
+                                            </div>
+                                        `;
+                                    });
+                                    resolve(researchArticles.filter(Boolean)); // Filter out empty articles
+                                })
+                                .catch(error => reject(error));
                         })
                         .catch(error => reject(error));
                 });
             }
-
+            
+            
+           
+            
+            
+            
+            
 
 
             function displaySocialTab(countryName) {
@@ -541,7 +460,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
             }
             
-            
+
             
 
             infoWindow.showInfo = showInfo; // Expose the function to the child window
@@ -553,11 +472,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     countries.forEach(function (country) {
-        var marker = L.marker([country.lat, country.lon]).addTo(map);
-        marker.on('click', function (e) {
+        var circle = L.circle([country.lat, country.lon], {
+            color: 'red', // outline color
+            fillColor: '#f03', // fill color
+            fillOpacity: 0.5, // fill opacity
+            radius: 250000 // radius of the circle in meters
+        }).addTo(map);
+    
+        circle.on('click', function (e) {
             displayCountryInfo(country.name);
         });
     });
+    
 
     // Search functionality
     document.getElementById('searchInput').addEventListener('keyup', function (event) {
