@@ -22,7 +22,7 @@ h1 {
 .button-container {
     display: grid;
     /*grid-auto-columns: 1fr; /* Makes all child elements take up equal space */
-    grid-template-columns: repeat(3, 10%) auto auto auto; /* Defines three columns with equal size, followed by an auto-sized column */
+    grid-template-columns: repeat(4, 10%) auto auto auto; /* Defines three columns with equal size, followed by an auto-sized column */
     align-items: center; /* Vertically align content in the center */
    gap:2px;
   }
