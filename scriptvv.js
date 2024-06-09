@@ -129,7 +129,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             <button id="News" class="info-btn" onclick="showInfo('News','${countryName}')">News</button>
             <button id="Research" class="info-btn" onclick="showInfo('Research','${countryName}')">Research</button>
             <button id="Social" class="info-btn" onclick="showInfo('Social','${countryName}')">Social</button>
-            <button id="Influencers" class="info-btn" onclick="showInfo('Influencers','${countryName}')">Influencers</button>
             <button id="Google Trend" class="info-btn" onclick="showInfo('Google Trend','${countryName}')">Google Trend</button>
             
             </div>
@@ -154,66 +153,68 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 content.innerHTML = 'Loading...';
 
                 if (tab === 'Statistics') {
-                    axios.get(`https://restcountries.com/v2/name/${encodeURIComponent(countryName)}`)
-                        .then(response => response.data)
-                        .then(data => {
-                            if (data && data.length > 0) {
-                                const countryInfo = data[0];
-                                content.innerHTML = `
-                                
-
-
-                            <div class="country-card">
-                            <div class="card-content">
-                            <div class="info-item">
-                                <span class="label">Population:</span>
-                                <span class="value">${countryInfo.population}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Area:</span>
-                                <span class="value">${countryInfo.area} square kilometers</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Capital:</span>
-                                <span class="value">${countryInfo.capital}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Region:</span>
-                                <span class="value">${countryInfo.region}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Subregion:</span>
-                                <span class="value">${countryInfo.subregion}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Population Density:</span>
-                                <span class="value">${(countryInfo.population / countryInfo.area).toFixed(2)} people/sq km</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Demonym:</span>
-                                <span class="value">${countryInfo.demonym}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Borders:</span>
-                                <span class="value">${countryInfo.borders}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">Time Zones:</span>
-                                <span class="value">${countryInfo.timezones}</span>
-                            </div>
-                            </div>
-                            </div>
-
-                        `;
-                            } else {
-                                content.innerHTML = 'No data found.';
+                   
+                  
+                    const flagUrl = `https://countriesnow.space/api/v0.1/countries/flag/images`;
+                  
+                    axios.get(flagUrl)
+                      .then(response => response.data)
+                      .then(data => {
+                        if (data && !data.error) {
+                          let foundFlag = false;
+                          let flagImage;
+                  
+                          for (const country of data.data) {
+                            if (country.name.toLowerCase() === countryName.toLowerCase()) {
+                              flagImage = country.flag;
+                              foundFlag = true;
+                              break; // Exit the loop once the country is found
                             }
-                        })
-                        .catch(error => {
-                            console.error('Error fetching country data:', error);
-                            content.innerHTML = `Error fetching country data: ${error.message}`;
-                        });
-                }
+                          }
+                        
+                          if (countryName === 'Russia' || countryName === 'russia') {
+                            // Manually set the flag URL for Russia as it was missing
+                            flagImage = 'https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg';
+                            foundFlag = true;
+                          }
+                          if (countryName === 'USA' || countryName === 'usa') {
+                            // Manually set the flag URL for Russia as it was missing
+                            flagImage = 'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg';
+                            foundFlag = true;
+                          }
+                          if (countryName === 'Libya' || countryName === 'libya') {
+                            // Manually set the flag URL for Russia as it was missing
+                            flagImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Libya.svg/1200px-Flag_of_Libya.svg.png';
+                            foundFlag = true;
+                          }
+
+                          if (foundFlag) {
+                            // Update the HTML to display the flag image
+                            content.innerHTML = `
+                              <div class="country-card">
+                                <div class="card-content">
+                                  <img src="${flagImage}" alt="Flag of ${country.name || 'Unknown'} width="200" height="100"">
+                                </div>
+                              </div>
+                            `;
+                          } else {
+                            console.error('Country flag not found in the response.');
+                            // Handle case where country is not found (e.g., display a message)
+                            content.innerHTML = 'Flag not found.';
+                          }
+                        } else {
+                          console.error('Error fetching flag data:', data.error);
+                          // Handle error scenario (e.g., display a generic error message)
+                          content.innerHTML = 'Error fetching flag data.';
+                        }
+                      })
+                      .catch(error => {
+                        console.error('Error fetching flag data:', error);
+                        // Handle network or other errors
+                        content.innerHTML = 'Error fetching flag data.';
+                      });
+                  }
+                  
                 else if (tab === 'Google Trend') {
                     
                         displayGoogleTrendsTab(countryName)
@@ -239,16 +240,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                             });
                     }       
                     
-                else if (tab === 'Influencers') {
-                    // Fetch influencers data and update content
-                    displayInfluencersTab(countryName)
-                    .then(data => updateContent(data))
-                        .catch(error => {
-                            console.error('Error fetching influencers:', error);
-                            content.innerHTML = `Error fetching influencers! Try again after 5 secs!: ${error.message}`;
-                        });
-                }
+                
                 else if (tab === 'News') {
+                    
                     // Fetch news data and update content
                     displayNewsTab(countryName)
                         .then(data => updateContent(data))
@@ -406,6 +400,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             })
             .then(data => {
                 console.log('API Response:', data);
+                const googleNewsUrl = `https://news.google.com/search?q=${encodeURIComponent('loneliness in ' + countryName)}&hl=en-US&gl=US&ceid=US:en`;
+                const googleNewsLink = `
+                    <div class="google-news-link">
+                        <a href="${googleNewsUrl}">View more news on Google News</a>
+                    </div>
+                `;
 
                 const articles = data.articles.map(article => {
                     const content = `${article.title}. ${article.description}. ${article.content}`.toLowerCase();
@@ -423,7 +423,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     `;
                 });
 
-                resolve(articles);
+                resolve([googleNewsLink,articles]);
             })
             .catch(error => reject(error));
             });
@@ -495,13 +495,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         .catch(error => reject(error));
                 });
             }
-            
-            
-           
-            
-            
-            
-            
+        
 
 
             function displaySocialTab(countryName) {
@@ -511,66 +505,19 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     const countryKeyword = countryName ? `${countryName} ${baseKeyword}` : baseKeyword;
                     const redditUrl = `https://www.reddit.com/search?q=${encodeURIComponent(countryKeyword)}&sort=new`;
                     const twitterUrl = `https://www.twitter.com/search?q=${encodeURIComponent(countryKeyword)}&f=live`;
+                    const QuoraUrl = `https://www.quora.com/search?q=${encodeURIComponent(countryKeyword)}`;
+                    const youtubeUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(countryKeyword)}`;
                     content.innerHTML = `
                     <div><a href="${redditUrl}">See how Reddit talks about Loneliness in ${countryName}</a></div>
                     <div><a href="${twitterUrl}">See how Twitter talks about Loneliness in ${countryName}</a></div>
+                    <div><a href="${QuoraUrl}">See Quora on Loneliness in ${countryName}</a></div>
+                    <div><a href="${youtubeUrl}">See videos on Youtube about Loneliness in ${countryName}</a></div>
                     `;
 
             }
             
 
-            function displayInfluencersTab(countryName) {
-                const apiUrl = 'https://influencer-search.p.rapidapi.com/api/v1/influencer/search';
-                const apiKey = '990239b5d9msh616b61bf8ff39e0p11f1f5jsnb7c2738d9ac2';
-                const baseKeyword = 'loneliness';
-                const synonyms = ['solitude', 'isolation', 'depression', 'alone'];
-                const keywordQuery = `${baseKeyword} OR ${synonyms.join(' OR ')}`;
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-RapidAPI-Key': apiKey,
-                        'X-RapidAPI-Host': 'influencer-search.p.rapidapi.com'
-                    },
-                    body: JSON.stringify({
-                        query: {
-                            keyword: baseKeyword
-                        }
-                    })
-                };
-            
-                return fetch(apiUrl, requestOptions)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`Failed to fetch influencers: ${response.status} ${response.statusText}`);
-                        }
-                        return response.json();
-                    })
-                    .then(result => {
-                        // Filter influencers based on countryName if available
-                        
-                        return result.data.slice(0, 20); // Limit to maximum 20 profiles
-                    })
-                    .then(data => {
-                        // Customize the data processing logic based on the influencer response structure
-                        const influencers = data.map(influencer => `
-                            <div class="influencer-profile">
-                                <h3>${influencer.name}</h3>
-                                <p>Screen Name: ${influencer.screen_name}</p>
-                                <p>Description: ${influencer.description}</p>
-                                <p>Followers: ${influencer.followers_count}</p>
-                                <p>Favourites: ${influencer.favourites_count}</p>
-                                <p>Friends: ${influencer.friends_count}</p>
-                                <p>Location(s): ${influencer.location}</p>
-                            </div>
-                        `);
-                        return influencers;
-                    })
-                    .catch(error => {
-                        console.error(error);
-                        throw new Error(`Error fetching influencers: ${error.message}`);
-                    });
-            }
+        
             
 
             
@@ -615,5 +562,9 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         }
     });
 
+   
+
     
 });
+
+
