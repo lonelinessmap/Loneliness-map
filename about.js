@@ -1,6 +1,6 @@
 function displayAboutContent() {
     worldMap.style.display = "none";
-    homeButton.style.display = "block";
+    
 
     const aboutContent = `
         <div class="about-content">
