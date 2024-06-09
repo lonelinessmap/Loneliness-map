@@ -16,6 +16,7 @@
         <h1>World Map on Loneliness</h1>
     </header>
     <div class="button-container">
+        <button id="homeButton" class="button" role="button">Home</button>
         <button id="button1" class="button" role="button">About</button>
         <button id="button2" class="button" role="button">Team</button>
         <button id="button3" class="button" role="button">Publications</button>
@@ -26,11 +27,7 @@
         <div class="spacer"></div>
         <span id="newsBtn" class="blinking-text" role="button">Latest News (Click here)</span>
     </div>
-    <div id="homeButton" class="icon-container" style="display: none;" onclick="showDefaultContent()">
-        <span>Home</span>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="cursor: pointer; fill: green;"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 3L2 12h3v8h4v-6h5v6h4v-8h3L12 3zm2 15h-4v-6H8l4-5 4 5h-2z"/></svg>
-        
-    </div>    
+       
     <div id="worldMap"></div>
     <div id="content" class="content">
         <!-- Dynamic content will be displayed here -->
@@ -75,7 +72,6 @@
 
         function showDefaultContent() {
             worldMap.style.display = "block";
-            homeButton.style.display = "none";
             contentDiv.innerHTML = "";
         }
     
