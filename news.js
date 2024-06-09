@@ -1,6 +1,6 @@
 function displayNews(homeButton) {
     worldMap.style.display = "none";
-    homeButton.style.display = "block";
+    
     contentDiv.innerHTML = '<h2>Latest News</h2><ul id="newsList"></ul>';
     fetchNews()
         .then(data => updateContentall(data))
