@@ -1,6 +1,6 @@
 function displayPublicationsContent() {
     worldMap.style.display = "none";
-    homeButton.style.display = "block";
+    
     
     const publications = [
         {
