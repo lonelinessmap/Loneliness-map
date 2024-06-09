@@ -7,19 +7,19 @@ function displayTeamContent() {
             name: "Mowafa",
             title: "Professor",
             bio: "he is currently a professor at HBKU",
-            photo: "photos/mowafa.jpg"
+            photo: "/photos/mowafa.jpg"
         },
         {
             name: "Hurmat",
             title: "Postdoc",
             bio: "he is currently a postdoc at HBKU.",
-            photo: "photos/hurmat.jpg"
+            photo: "/photos/hurmat.jpg"
         },
         {
             name: "Atiq",
             title: "Software Engineer",
             bio: "he is currently a software engineer at HBKU.",
-            photo: "photos/atiq.png"
+            photo: "/photos/atiq.png"
         }
     ];
 
