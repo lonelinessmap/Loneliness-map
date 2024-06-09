@@ -1,6 +1,6 @@
 function displayTeamContent() {
     worldMap.style.display = "none";
-    homeButton.style.display = "block";
+    
     
     const teamMembers = [
         {
